@@ -1,10 +1,16 @@
-import express from 'express'
+const express = require('express');
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(express.json());
+
+
 import {config} from 'dotenv'
 import pg from 'pg'
 
 config()
 
-const app = express()
+
 const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL
 })
@@ -18,4 +24,4 @@ app.get('/ping',async (req, res) => {
   return res.json(result.rows[0])
 })
 
-app.listen(3000)
+app.use(express.json());
