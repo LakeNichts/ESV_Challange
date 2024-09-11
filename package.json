@@ -1,8 +1,10 @@
 {
   "name": "esv_challange",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "api.js",
+  "type": "module",
   "scripts": {
+    "start": "node api.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -11,7 +13,7 @@
   "description": "",
   "dependencies": {
     "dotenv": "^16.4.5",
-    "express": "^4.20.0",
+    "express": "^4.20.0", 
     "pg": "^8.12.0"
   }
 }
