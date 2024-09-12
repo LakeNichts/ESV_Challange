@@ -1,6 +1,8 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param } from '@nestjs/common';
 import { NotesService } from './notes.service';
 import { Note } from './note.entity';
+import {CreateNoteDto} from './dto/create-note.dto'
+import {UpdateNoteDto} from './dto/update-note.dto'
 
 @Controller('notes')
 export class NotesController {
@@ -12,22 +14,22 @@ export class NotesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<Note> {
+  findOne(@Param('id') id: number): Promise<Note> {
     return this.notesService.findOne(+id);
   }
 
   @Post()
-  create(@Body() note: Partial<Note>): Promise<Note> {
-    return this.notesService.create(note);
+  create(@Body() createNoteDto: CreateNoteDto) {
+    return this.notesService.create(createNoteDto);
   }
 
-  @Put(':id')
-  update(@Param('id') id: string, @Body() note: Partial<Note>): Promise<Note> {
-    return this.notesService.update(+id, note);
+  @Patch(':id')
+  update(@Param('id') id: number, @Body() updateNoteDto: UpdateNoteDto) {
+    return this.notesService.update(id, updateNoteDto);
   }
 
   @Delete(':id')
-  delete(@Param('id') id: string): Promise<void> {
-    return this.notesService.delete(+id);
+  delete(@Param('id') id: number): Promise<void> {
+    return this.notesService.delete(id);
   }
 }

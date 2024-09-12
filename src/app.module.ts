@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { NotesModule } from './notes/notes.module';
 import { Note } from './notes/note.entity';
 import { ConfigModule } from '@nestjs/config';
+import { TagsModule } from './tags/tags.module';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { ConfigModule } from '@nestjs/config';
       password: process.env.POSTGRES_PASSWORD,  
       database: process.env.POSTGRES_DATABASE,
       autoLoadEntities: true,  
-      synchronize: true,
+      synchronize: false,
       ssl: process.env.POSTGRES_SSL === "TRUE",
       extra:{
         ssl:
@@ -31,6 +32,7 @@ import { ConfigModule } from '@nestjs/config';
       }
     }),
     NotesModule,
+    TagsModule,
   ],
 })
 export class AppModule {}
