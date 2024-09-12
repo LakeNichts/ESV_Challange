@@ -2,16 +2,22 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { NotesModule } from './notes/notes.module';
 import { Note } from './notes/note.entity';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+
+    ConfigModule.forRoot({
+      isGlobal:true,
+    }),
+
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'dpg-crgggdl6l47c73dvdceg-a.oregon-postgres.render.com',  
-      port: 5432,
-      username: 'esv_challange_postgressql_user',  
-      password: 'zbJ0HWu71oyHR9HOsuG2aaqJ02mXnQPK',  
-      database: 'esv_challange_postgressql',  
+      host: process.env.POSTGRES_HOST,  
+      port: parseInt(process.env.POSTGRES_PORT),
+      username: process.env.POSTGRES_USERNAME,  
+      password: process.env.POSTGRES_PASSWORD,  
+      database: process.env.POSTGRES_DATABASE,  
       entities: [Note],
       synchronize: true,
     }),
