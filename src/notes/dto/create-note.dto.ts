@@ -1,4 +1,4 @@
-import { IsInt, IsOptional, IsPositive, IsString, MinLength } from 'class-validator'
+import { IsInt, IsOptional, IsPositive, IsString, MinLength, IsArray  } from 'class-validator'
 
 export class CreateNoteDto{
     
@@ -6,12 +6,16 @@ export class CreateNoteDto{
     @IsPositive()
     @IsOptional()
     user_id?: number;
-
-    @IsString()
-    @MinLength(1)
-    title: string;
     
     @IsString()
     @MinLength(1)
     content: string;
+
+    @IsOptional()
+    is_archived?: boolean;
+
+    @IsArray()
+    @IsInt({ each: true })  
+    @IsOptional()           
+    tags?: number[];         
 }

@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToMany, JoinTable } from 'typeorm';
+import { Tag } from '../tags/entities/tag.entity';
 
 @Entity('notes') // nombre de la tabla en la base de datos
 export class Note {
@@ -7,9 +8,6 @@ export class Note {
 
   @Column({default: 1})
   user_id: number;
-
-  @Column({ length: 255 })
-  title: string;
 
   @Column('text')
   content: string;
@@ -20,6 +18,11 @@ export class Note {
   @CreateDateColumn()
   created_at: Date;
 
-  @UpdateDateColumn()
-  updated_at: Date;
+  // @ManyToMany(() => Tag)
+  // @JoinTable()
+  // tags: Tag[]
+
+  @ManyToMany(() => Tag, tag => tag.notes)
+  @JoinTable({ name: "notetags" })
+  tags: Tag[];
 }

@@ -15,11 +15,11 @@ export class NotesController {
 
   @Get(':id')
   findOne(@Param('id') id: number): Promise<Note> {
-    return this.notesService.findOne(+id);
+    return this.notesService.getNoteWithTags(+id);
   }
 
   @Post()
-  create(@Body() createNoteDto: CreateNoteDto) {
+  create(@Body() createNoteDto: CreateNoteDto): Promise<Note> {
     return this.notesService.create(createNoteDto);
   }
 
