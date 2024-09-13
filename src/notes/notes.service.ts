@@ -5,6 +5,7 @@ import { Note } from './note.entity';
 import {CreateNoteDto} from './dto/create-note.dto'
 import {UpdateNoteDto} from './dto/update-note.dto'
 import { Tag } from '../tags/entities/tag.entity';
+import { NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class NotesService {
@@ -57,10 +58,38 @@ export class NotesService {
   }
 
   // Actualizar una nota
-  async update(id: number, updateNoteDto: UpdateNoteDto) {
-    //await this.notesRepository.update(id, updateNoteDto);
-    //return this.notesRepository.findOneBy({ id });
-    return `This action updates a #${id} tag`;
+  async update(id: number, updateNoteDto: UpdateNoteDto): Promise<Note> {
+    const { content, user_id, is_archived, tags } = updateNoteDto;
+  
+    // Buscar la nota existente
+    const note = await this.notesRepository.findOne({
+      where: { id },
+      relations: ['tags'], // Incluye los tags actuales
+    });
+  
+    if (!note) {
+      throw new NotFoundException(`Note with ID ${id} not found`);
+    }
+  
+    // Manejar los tags
+    if (tags && tags.length === 0) {
+      // Si el array de tags está vacío, eliminar todos los tags
+      note.tags = [];
+    }  else if (tags && tags.length > 0) {
+      // Si hay tags válidos, buscarlos en el repositorio
+      const updatedTags = await this.tagRepository.findBy({
+        id: In(tags), // Solo incluir los tags válidos que existan
+      });
+      note.tags = updatedTags;
+    }
+  
+    // Actualizar los otros campos de la nota si se incluyen en el DTO
+    note.content = content ?? note.content;
+    note.user_id = user_id ?? note.user_id;
+    note.is_archived = is_archived !== undefined ? is_archived : note.is_archived;
+  
+    // Guardar los cambios
+    return this.notesRepository.save(note);
   }
 
   // Eliminar una nota

@@ -18,10 +18,6 @@ export class Note {
   @CreateDateColumn()
   created_at: Date;
 
-  // @ManyToMany(() => Tag)
-  // @JoinTable()
-  // tags: Tag[]
-
   @ManyToMany(() => Tag, tag => tag.notes)
   @JoinTable({ name: "notetags" })
   tags: Tag[];
